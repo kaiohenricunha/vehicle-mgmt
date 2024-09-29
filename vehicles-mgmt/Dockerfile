@@ -59,7 +59,7 @@ RUN addgroup --system $APPLICATION_USER &&  adduser --system $APPLICATION_USER -
 RUN mkdir /app && chown -R $APPLICATION_USER /app
 
 # Copy the built jar file from the first stage
-COPY --from=jre-builder /opt/app/build/libs/vehicle-mgmt-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY --from=jre-builder /opt/app/build/libs/vehicles-mgmt-0.0.1-SNAPSHOT.jar /app/app.jar
 
 WORKDIR /app
 
