@@ -16,3 +16,9 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
 server:
   port: 8081
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
