@@ -23,13 +23,13 @@ RUN wget https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zi
 RUN gradle build -x test --no-daemon
 
 # Unpack the JAR
-RUN jar xvf build/libs/vehicle-mgmt-0.0.1-SNAPSHOT.jar
+RUN jar xvf build/libs/vehicles-mgmt-0.0.1-SNAPSHOT.jar
 RUN jdeps --ignore-missing-deps -q  \
     --recursive  \
     --multi-release 17  \
     --print-module-deps  \
     --class-path 'BOOT-INF/lib/*'  \
-    build/libs/vehicle-mgmt-0.0.1-SNAPSHOT.jar > modules.txt
+    build/libs/vehicles-mgmt-0.0.1-SNAPSHOT.jar > modules.txt
 
 # Build small JRE image
 RUN $JAVA_HOME/bin/jlink \

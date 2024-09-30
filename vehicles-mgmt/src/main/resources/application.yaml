@@ -1,22 +1,15 @@
 spring:
   application:
     name: vehicles-mgmt
-  datasource:
-    url: jdbc:h2:mem:vehicle_db;DB_CLOSE_DELAY=-1
-    driverClassName: org.h2.Driver
-    username: sa
-    password: password
-  h2:
-    console:
-      enabled: true
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/vehicle_db
+    password: your_password
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
+  webflux:
+    base-path: /vehicles
 eureka:
   client:
     serviceUrl:

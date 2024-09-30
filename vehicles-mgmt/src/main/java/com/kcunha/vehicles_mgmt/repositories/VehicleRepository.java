@@ -1,9 +1,10 @@
 package com.kcunha.vehicles_mgmt.repositories;
 
-import com.kcunha.vehicles_mgmt.models.Vehicle;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 
+import com.kcunha.vehicles_mgmt.models.Vehicle;
+
 @Repository
-public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
+public interface VehicleRepository extends ReactiveCrudRepository<Vehicle, Long> {
 }

@@ -8,6 +8,16 @@ services:
     ports:
       - "8761:8761"
 
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_DB: vehicle_db
+      POSTGRES_USER: your_username
+      POSTGRES_PASSWORD: your_password
+    ports:
+      - "5432:5432"
+
   vehicles-mgmt:
     build:
       context: ./vehicles-mgmt
@@ -16,9 +26,10 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:h2:mem:vehicle_db;DB_CLOSE_DELAY=-1
-      - SPRING_DATASOURCE_USERNAME=sa
-      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_R2DBC_URL=r2dbc:postgresql://postgres:5432/vehicle_db
+      - SPRING_R2DBC_USERNAME=your_username  
+      - SPRING_R2DBC_PASSWORD=your_password
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
     depends_on:
       - eureka-server
+      - postgres

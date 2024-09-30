@@ -20,19 +20,27 @@ repositories {
 extra["springCloudVersion"] = "2022.0.3"
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("com.h2database:h2")
+    // R2DBC for PostgreSQL with the correct version
+    implementation("io.r2dbc:r2dbc-postgresql:0.8.13.RELEASE")
+
+    // Spring Boot WebFlux and Data R2DBC
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+    
+    // PostgreSQL driver
+    runtimeOnly("org.postgresql:postgresql")
+
+    // Spring Cloud Netflix Eureka Client and LoadBalancer
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-loadbalancer")
-    implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
-    implementation("jakarta.validation:jakarta.validation-api:3.0.2")
-    implementation("org.hibernate.orm:hibernate-core:6.2.5.Final")
 
+    // SpringDoc OpenAPI for WebFlux
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.1.0")
+
+    // Testing Dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("com.h2database:h2")
-    runtimeOnly("com.h2database:h2") // For in-memory database during tests
+    testImplementation("io.projectreactor:reactor-test")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
 }
 
 dependencyManagement {
