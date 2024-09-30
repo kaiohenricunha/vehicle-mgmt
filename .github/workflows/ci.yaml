@@ -1,0 +1,45 @@
+name: Build and Test Spring Boot Microservice
+
+on:
+  push:
+    branches:
+      - main   # Adjust if needed
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the code from the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up JDK 17 (adjust the version as needed)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'  # Options: adopt, zulu, etc.
+          cache: gradle            # Cache the Gradle dependencies
+
+      # Step 3: Cache Gradle dependencies for the vehicles-mgmt project
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: vehicles-mgmt/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('vehicles-mgmt/**/*.gradle*', 'vehicles-mgmt/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # Step 4: Build and test the vehicles-mgmt Spring Boot application using Gradle
+      - name: Build and Test
+        working-directory: vehicles-mgmt  # Set the working directory to the vehicles-mgmt project
+        run: ./gradlew clean build --no-daemon
+
+      # Step 5: Archive test reports from the vehicles-mgmt project (optional but recommended)
+      - name: Archive Test Reports
+        if: always()  # Ensures the step runs even if the tests fail
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: vehicles-mgmt/build/reports/tests/test
