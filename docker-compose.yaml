@@ -7,6 +7,8 @@ services:
     container_name: eureka-server
     ports:
       - "8761:8761"
+    environment:
+      - EUREKA_SERVER_PEER_NODE_READ_TIMEOUT_MS=10000  # Increase peer node read timeout
 
   postgres:
     image: postgres:15
@@ -26,10 +28,32 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_R2DBC_URL=r2dbc:postgresql://postgres:5432/vehicle_db
+      - SPRING_R2DBC_URL=r2dbc:postgresql://postgres:5432/vehicle_db  # Use service name 'postgres' for DB connection
       - SPRING_R2DBC_USERNAME=your_username  
       - SPRING_R2DBC_PASSWORD=your_password
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
     depends_on:
       - eureka-server
       - postgres
+
+  vehicles-mgmt-2:
+    build:
+      context: ./vehicles-mgmt
+      dockerfile: Dockerfile
+    container_name: vehicles-mgmt-2
+    ports:
+      - "8082:8082"    # Ensure the service uses port 8082
+    environment:
+      - SPRING_R2DBC_URL=r2dbc:postgresql://postgres:5432/vehicle_db
+      - SPRING_R2DBC_USERNAME=your_username  
+      - SPRING_R2DBC_PASSWORD=your_password
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SERVER_PORT=8082    # Ensure the second instance runs on port 8082
+      - SPRING_APPLICATION_NAME=vehicles-mgmt-2   # Use a different application name
+    depends_on:
+      - eureka-server
+      - postgres
+
+networks:
+  default:
+    driver: bridge  # Ensures Docker network communication

@@ -10,7 +10,7 @@ export let options = {
 };
 
 export default function () {
-  const res = http.get('http://localhost:8081/status');
+  const res = http.get('http://localhost:8081/vehicles/status');
   
   // Check if the response status is 200
   check(res, {
